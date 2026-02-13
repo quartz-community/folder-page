@@ -32,6 +32,12 @@ interface TrieNode {
   findNode(path: string[]): TrieNode | undefined;
 }
 
+type PageEntry = {
+  slug?: string;
+  dates?: { created: Date; modified: Date; published: Date };
+  frontmatter?: { title?: string; tags?: string[] };
+};
+
 function concatenateResources(
   ...resources: (string | string[] | undefined)[]
 ): string | string[] | undefined {
@@ -39,76 +45,127 @@ function concatenateResources(
   return result.length === 0 ? undefined : result;
 }
 
+function pagesFromTrie(folder: TrieNode, showSubfolders: boolean): PageEntry[] {
+  return folder.children
+    .map((node) => {
+      const nodeData = node.data as PageEntry | null;
+      if (nodeData) return nodeData;
+
+      if (node.isFolder && showSubfolders) {
+        return {
+          slug: node.slug,
+          dates: mostRecentDatesFromChildren(node.children),
+          frontmatter: { title: node.displayName, tags: [] },
+        };
+      }
+      return undefined;
+    })
+    .filter((page): page is PageEntry => page !== undefined);
+}
+
+function pagesFromAllFiles(
+  allFiles: unknown[],
+  folderSlug: string,
+  showSubfolders: boolean,
+): PageEntry[] {
+  const folderPrefix = folderSlug.endsWith("/index")
+    ? folderSlug.slice(0, -"index".length)
+    : folderSlug.endsWith("/")
+      ? folderSlug
+      : folderSlug + "/";
+
+  const directChildren: PageEntry[] = [];
+  const subfolderFiles = new Map<string, PageEntry[]>();
+
+  for (const file of allFiles as PageEntry[]) {
+    const fileSlug = file.slug;
+    if (!fileSlug || !fileSlug.startsWith(folderPrefix)) continue;
+
+    const relativePath = fileSlug.slice(folderPrefix.length);
+    if (!relativePath || relativePath === "index") continue;
+
+    const segments = relativePath.split("/");
+
+    if (segments.length === 1) {
+      directChildren.push(file);
+    } else if (showSubfolders) {
+      const subfolderName = segments[0]!;
+      if (!subfolderFiles.has(subfolderName)) {
+        subfolderFiles.set(subfolderName, []);
+      }
+      subfolderFiles.get(subfolderName)!.push(file);
+    }
+  }
+
+  for (const [subfolderName, files] of subfolderFiles) {
+    const indexFile = files.find((f) => f.slug === `${folderPrefix}${subfolderName}/index`);
+    if (indexFile) continue;
+
+    directChildren.push({
+      slug: `${folderPrefix}${subfolderName}/index`,
+      dates: mostRecentDatesFromEntries(files),
+      frontmatter: { title: subfolderName, tags: [] },
+    });
+  }
+
+  return directChildren;
+}
+
+function mostRecentDatesFromChildren(children: TrieNode[]): PageEntry["dates"] {
+  let maybeDates: PageEntry["dates"] | undefined;
+  for (const child of children) {
+    const childDates = (child.data as { dates?: PageEntry["dates"] } | null)?.dates;
+    if (childDates) {
+      if (!maybeDates) {
+        maybeDates = { ...childDates };
+      } else {
+        if (childDates.created > maybeDates.created) maybeDates.created = childDates.created;
+        if (childDates.modified > maybeDates.modified) maybeDates.modified = childDates.modified;
+        if (childDates.published > maybeDates.published)
+          maybeDates.published = childDates.published;
+      }
+    }
+  }
+  return maybeDates ?? { created: new Date(), modified: new Date(), published: new Date() };
+}
+
+function mostRecentDatesFromEntries(entries: PageEntry[]): PageEntry["dates"] {
+  let maybeDates: PageEntry["dates"] | undefined;
+  for (const entry of entries) {
+    if (entry.dates) {
+      if (!maybeDates) {
+        maybeDates = { ...entry.dates };
+      } else {
+        if (entry.dates.created > maybeDates.created) maybeDates.created = entry.dates.created;
+        if (entry.dates.modified > maybeDates.modified) maybeDates.modified = entry.dates.modified;
+        if (entry.dates.published > maybeDates.published)
+          maybeDates.published = entry.dates.published;
+      }
+    }
+  }
+  return maybeDates ?? { created: new Date(), modified: new Date(), published: new Date() };
+}
+
 export default ((opts?: Partial<FolderContentOptions>) => {
   const options: FolderContentOptions = { ...defaultOptions, ...opts };
 
   const FolderContent: QuartzComponent = (props: QuartzComponentProps) => {
-    const { tree, fileData, cfg } = props;
+    const { tree, fileData, allFiles, cfg } = props;
     const ctx = props.ctx as { trie?: TrieNode } | undefined;
-
-    const trie = ctx?.trie;
     const slug = (fileData as { slug?: string } | undefined)?.slug;
 
-    if (!trie || !slug) {
-      return null;
+    if (!slug) return null;
+
+    const trie = ctx?.trie;
+    let allPagesInFolder: PageEntry[];
+
+    if (trie) {
+      const folder = trie.findNode(slug.split("/"));
+      if (!folder) return null;
+      allPagesInFolder = pagesFromTrie(folder, options.showSubfolders);
+    } else {
+      allPagesInFolder = pagesFromAllFiles(allFiles ?? [], slug, options.showSubfolders);
     }
-
-    const folder = trie.findNode(slug.split("/"));
-    if (!folder) {
-      return null;
-    }
-
-    type PageEntry = {
-      slug?: string;
-      dates?: { created: Date; modified: Date; published: Date };
-      frontmatter?: { title?: string; tags?: string[] };
-    };
-
-    const allPagesInFolder: PageEntry[] =
-      folder.children
-        .map((node) => {
-          const nodeData = node.data as PageEntry | null;
-
-          if (nodeData) return nodeData;
-          if (node.isFolder && options.showSubfolders) {
-            const getMostRecentDates = (): {
-              created: Date;
-              modified: Date;
-              published: Date;
-            } => {
-              let maybeDates: { created: Date; modified: Date; published: Date } | undefined;
-              for (const child of node.children) {
-                const childDates = (child.data as { dates?: PageEntry["dates"] } | null)?.dates;
-                if (childDates) {
-                  if (!maybeDates) {
-                    maybeDates = { ...childDates };
-                  } else {
-                    if (childDates.created > maybeDates.created)
-                      maybeDates.created = childDates.created;
-                    if (childDates.modified > maybeDates.modified)
-                      maybeDates.modified = childDates.modified;
-                    if (childDates.published > maybeDates.published)
-                      maybeDates.published = childDates.published;
-                  }
-                }
-              }
-              return (
-                maybeDates ?? {
-                  created: new Date(),
-                  modified: new Date(),
-                  published: new Date(),
-                }
-              );
-            };
-            return {
-              slug: node.slug,
-              dates: getMostRecentDates(),
-              frontmatter: { title: node.displayName, tags: [] },
-            };
-          }
-          return undefined;
-        })
-        .filter((page): page is PageEntry => page !== undefined) ?? [];
 
     const cssClasses =
       ((fileData as { frontmatter?: { cssclasses?: string[] } } | undefined)?.frontmatter
