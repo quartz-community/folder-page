@@ -1,23 +1,20 @@
 {
-  "name": "@quartz-community/plugin-template",
+  "name": "@quartz-community/folder-page",
   "version": "0.1.0",
-  "description": "Template repository for Quartz community plugins.",
+  "description": "Folder page type plugin for Quartz.",
   "type": "module",
   "license": "MIT",
   "author": "Quartz Community",
   "homepage": "https://quartz.jzhao.xyz",
   "repository": {
     "type": "git",
-    "url": "https://github.com/quartz-community/plugin-template"
+    "url": "https://github.com/quartz-community/folder-page"
   },
   "keywords": [
     "quartz",
     "quartz-plugin",
-    "plugin-template",
-    "remark",
-    "rehype",
-    "mdast",
-    "hast"
+    "folder-page",
+    "page-type"
   ],
   "files": [
     "dist",
@@ -67,13 +64,7 @@
   },
   "dependencies": {
     "@quartz-community/types": "github:quartz-community/types",
-    "mdast-util-find-and-replace": "^3.0.1",
-    "rehype-slug": "^6.0.0",
-    "remark-gfm": "^4.0.1",
-    "remark-parse": "^11.0.0",
-    "remark-stringify": "^11.0.0",
-    "unified": "^11.0.5",
-    "unist-util-visit": "^5.0.0",
+    "hast-util-to-jsx-runtime": "^2.3.6",
     "vfile": "^6.0.3"
   },
   "devDependencies": {
