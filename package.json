@@ -88,7 +88,10 @@
   "quartz": {
     "name": "folder-page",
     "displayName": "Folder Page",
-    "category": "emitter",
+    "category": [
+      "pageType",
+      "component"
+    ],
     "version": "1.0.0",
     "quartzVersion": ">=5.0.0",
     "dependencies": [],
