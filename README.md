@@ -10,28 +10,21 @@ npx quartz plugin add github:quartz-community/folder-page
 
 ## Usage
 
-```ts
-// quartz.config.ts
-import * as ExternalPlugin from "./.quartz/plugins";
-
-const config: QuartzConfig = {
-  plugins: {
-    pageTypes: [ExternalPlugin.FolderPage()],
-  },
-};
+```yaml title="quartz.config.yaml"
+plugins:
+  - source: github:quartz-community/folder-page
+    enabled: true
 ```
 
-```ts
-// quartz.layout.ts
-export const layout = {
-  byPageType: {
-    folder: {
-      beforeBody: [...],
-      left: [...],
-      right: [...],
-    },
-  },
-}
+For advanced use cases, you can override in TypeScript:
+
+```ts title="quartz.ts (override)"
+import * as ExternalPlugin from "./.quartz/plugins";
+
+ExternalPlugin.FolderPage({
+  showFolderCount: true,
+  showSubfolders: true,
+});
 ```
 
 ## Configuration
@@ -44,7 +37,7 @@ export const layout = {
 
 ## Documentation
 
-See the [Quartz documentation](https://quartz.jzhao.xyz/) for more information.
+See the [Quartz documentation](https://quartz.jzhao.xyz/plugins/FolderPage) for more information.
 
 ## License
 
