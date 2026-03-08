@@ -5,8 +5,7 @@ import type {
 } from "@quartz-community/types";
 import { PageList } from "./PageList";
 import type { SortFn } from "./PageList";
-import { toJsxRuntime } from "hast-util-to-jsx-runtime";
-import { jsx, jsxs, Fragment } from "preact/jsx-runtime";
+import { htmlToJsx } from "@quartz-community/utils/jsx";
 import type { ComponentChildren } from "preact";
 import type { Root } from "hast";
 import { i18n } from "../i18n";
@@ -181,12 +180,7 @@ export default ((opts?: Partial<FolderContentOptions>) => {
     const content =
       hastRoot.children.length === 0
         ? (fileData as { description?: unknown } | undefined)?.description
-        : toJsxRuntime(hastRoot, {
-            Fragment,
-            jsx: jsx as any,
-            jsxs: jsxs as any,
-            elementAttributeNameCase: "html",
-          });
+        : htmlToJsx(hastRoot);
 
     const pageListContent = PageList(listProps) as unknown as ComponentChildren;
 
