@@ -45,12 +45,32 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
       const locale = (cfg as { locale?: string } | undefined)?.locale ?? "en-US";
 
       const folders = new Set<string>();
+      const folderDisplayNames = new Map<string, string>();
       for (const file of allFiles) {
         const slug = (file as { slug?: string } | undefined)?.slug;
         if (!slug) continue;
         const fileFolders = getFolders(slug).filter((f) => f !== "." && f !== "tags");
         for (const f of fileFolders) {
           folders.add(f);
+        }
+
+        const relativePath = (file as { relativePath?: string } | undefined)?.relativePath;
+        if (relativePath) {
+          const slugParts = path
+            .dirname(slug)
+            .split("/")
+            .filter((s) => s !== ".");
+          const pathParts = path
+            .dirname(relativePath)
+            .split("/")
+            .filter((s) => s !== ".");
+          for (let i = 0; i < slugParts.length && i < pathParts.length; i++) {
+            const slugPart = slugParts[i];
+            const pathPart = pathParts[i];
+            if (slugPart && pathPart && !folderDisplayNames.has(slugPart)) {
+              folderDisplayNames.set(slugPart, pathPart);
+            }
+          }
         }
       }
 
@@ -68,7 +88,8 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
         if (foldersWithIndex.has(folder)) continue;
 
         const slug = joinSegments(folder, "index") as unknown as FullSlug;
-        const folderName = folder.split("/").pop() ?? folder;
+        const slugSegment = folder.split("/").pop() ?? folder;
+        const folderName = folderDisplayNames.get(slugSegment) ?? slugSegment;
         const title = opts?.prefixFolders
           ? `${i18n(locale).pages.folderContent.folder}: ${folderName}`
           : folderName;

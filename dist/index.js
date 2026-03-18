@@ -294,12 +294,25 @@ var FolderPage = (opts) => {
       const allFiles = content.map((c) => c[1].data);
       const locale = cfg?.locale ?? "en-US";
       const folders = /* @__PURE__ */ new Set();
+      const folderDisplayNames = /* @__PURE__ */ new Map();
       for (const file of allFiles) {
         const slug = file?.slug;
         if (!slug) continue;
         const fileFolders = getFolders(slug).filter((f) => f !== "." && f !== "tags");
         for (const f of fileFolders) {
           folders.add(f);
+        }
+        const relativePath = file?.relativePath;
+        if (relativePath) {
+          const slugParts = path.dirname(slug).split("/").filter((s) => s !== ".");
+          const pathParts = path.dirname(relativePath).split("/").filter((s) => s !== ".");
+          for (let i = 0; i < slugParts.length && i < pathParts.length; i++) {
+            const slugPart = slugParts[i];
+            const pathPart = pathParts[i];
+            if (slugPart && pathPart && !folderDisplayNames.has(slugPart)) {
+              folderDisplayNames.set(slugPart, pathPart);
+            }
+          }
         }
       }
       const foldersWithIndex = /* @__PURE__ */ new Set();
@@ -314,7 +327,8 @@ var FolderPage = (opts) => {
       for (const folder of folders) {
         if (foldersWithIndex.has(folder)) continue;
         const slug = joinSegments(folder, "index");
-        const folderName = folder.split("/").pop() ?? folder;
+        const slugSegment = folder.split("/").pop() ?? folder;
+        const folderName = folderDisplayNames.get(slugSegment) ?? slugSegment;
         const title = opts?.prefixFolders ? `${i18n(locale).pages.folderContent.folder}: ${folderName}` : folderName;
         virtualPages.push({
           slug,
