@@ -15,6 +15,8 @@ export interface FolderPageOptions {
   showFolderCount?: boolean;
   showSubfolders?: boolean;
   sort?: SortFn;
+  /** Show "Folder: " prefix before folder name in generated titles. Default: false */
+  prefixFolders?: boolean;
 }
 
 const folderMatcher: PageMatcher = ({ slug }) => {
@@ -66,7 +68,10 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
         if (foldersWithIndex.has(folder)) continue;
 
         const slug = joinSegments(folder, "index") as unknown as FullSlug;
-        const title = `${i18n(locale).pages.folderContent.folder}: ${folder}`;
+        const folderName = folder.split("/").pop() ?? folder;
+        const title = opts?.prefixFolders
+          ? `${i18n(locale).pages.folderContent.folder}: ${folderName}`
+          : folderName;
 
         virtualPages.push({
           slug,

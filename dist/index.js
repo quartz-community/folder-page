@@ -314,7 +314,8 @@ var FolderPage = (opts) => {
       for (const folder of folders) {
         if (foldersWithIndex.has(folder)) continue;
         const slug = joinSegments(folder, "index");
-        const title = `${i18n(locale).pages.folderContent.folder}: ${folder}`;
+        const folderName = folder.split("/").pop() ?? folder;
+        const title = opts?.prefixFolders ? `${i18n(locale).pages.folderContent.folder}: ${folderName}` : folderName;
         virtualPages.push({
           slug,
           title,
