@@ -24,16 +24,18 @@ import * as ExternalPlugin from "./.quartz/plugins";
 ExternalPlugin.FolderPage({
   showFolderCount: true,
   showSubfolders: true,
+  prefixFolders: false,
 });
 ```
 
 ## Configuration
 
-| Option            | Type      | Default     | Description                                        |
-| ----------------- | --------- | ----------- | -------------------------------------------------- |
-| `showFolderCount` | `boolean` | `undefined` | Whether to show the number of items in the folder. |
-| `showSubfolders`  | `boolean` | `undefined` | Whether to show subfolders in the listing.         |
-| `sort`            | `SortFn`  | `undefined` | A function to sort the pages in the folder.        |
+| Option            | Type      | Default     | Description                                                                            |
+| ----------------- | --------- | ----------- | -------------------------------------------------------------------------------------- |
+| `showFolderCount` | `boolean` | `undefined` | Whether to show the number of items in the folder.                                     |
+| `showSubfolders`  | `boolean` | `undefined` | Whether to show subfolders in the listing.                                             |
+| `sort`            | `SortFn`  | `undefined` | A function to sort the pages in the folder.                                            |
+| `prefixFolders`   | `boolean` | `false`     | Whether to prefix generated folder page titles with "Folder: " (e.g. "Folder: notes"). |
 
 ## Documentation
 
