@@ -323,6 +323,16 @@ var FolderPage = (opts) => {
           foldersWithIndex.add(folder);
         }
       }
+      for (const [, file] of content) {
+        const slug = file.data?.slug;
+        if (!slug || !slug.endsWith("/index")) continue;
+        const frontmatter = file.data.frontmatter;
+        if (!frontmatter || frontmatter.title && frontmatter.title !== "index") continue;
+        const folder = slug.slice(0, -"/index".length);
+        const slugSegment = folder.split("/").pop() ?? folder;
+        const folderName = folderDisplayNames.get(slugSegment) ?? slugSegment;
+        frontmatter.title = opts?.prefixFolders ? `${i18n(locale).pages.folderContent.folder}: ${folderName}` : folderName;
+      }
       const virtualPages = [];
       for (const folder of folders) {
         if (foldersWithIndex.has(folder)) continue;
