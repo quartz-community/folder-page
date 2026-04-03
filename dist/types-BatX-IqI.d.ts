@@ -1,5 +1,4 @@
-import { QuartzPageTypePlugin } from '@quartz-community/types';
-import { S as SortFn } from './PageList-DncPcZ4-.js';
+import { QuartzPageTypePlugin, SortFn } from '@quartz-community/types';
 
 interface FolderPageOptions {
     showFolderCount?: boolean;

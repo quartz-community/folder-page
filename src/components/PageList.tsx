@@ -1,8 +1,13 @@
-import type { QuartzComponent, QuartzComponentProps } from "@quartz-community/types";
+import type {
+  QuartzComponent,
+  QuartzComponentProps,
+  QuartzPluginData,
+  SortFn,
+} from "@quartz-community/types";
 import { resolveRelative, isFolderPath } from "../util/path";
 import type { FullSlug } from "../util/path";
 
-interface PageData {
+interface PageData extends QuartzPluginData {
   slug?: string;
   frontmatter?: { title?: string; tags?: string[] };
   dates?: {
@@ -13,7 +18,7 @@ interface PageData {
   [key: string]: unknown;
 }
 
-export type SortFn = (f1: PageData, f2: PageData) => number;
+export type { SortFn } from "@quartz-community/types";
 
 function getDate(cfg: unknown, data: PageData): Date | undefined {
   const type = (cfg as { defaultDateType?: string } | undefined)?.defaultDateType ?? "created";

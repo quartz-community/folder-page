@@ -1,12 +1,9 @@
-import { QuartzComponent } from '@quartz-community/types';
-import { S as SortFn } from '../PageList-DncPcZ4-.js';
-export { P as PageList, b as byDateAndAlphabetical, a as byDateAndAlphabeticalFolderFirst } from '../PageList-DncPcZ4-.js';
+export { _ as FolderContent } from '../FolderContent-DEXAgZWS.js';
+import { QuartzComponent, SortFn } from '@quartz-community/types';
+export { SortFn } from '@quartz-community/types';
 
-interface FolderContentOptions {
-    showFolderCount: boolean;
-    showSubfolders: boolean;
-    sort?: SortFn;
-}
-declare const _default: (opts?: Partial<FolderContentOptions>) => QuartzComponent;
+declare function byDateAndAlphabetical(cfg: unknown): SortFn;
+declare function byDateAndAlphabeticalFolderFirst(cfg: unknown): SortFn;
+declare const PageList: QuartzComponent;
 
-export { _default as FolderContent, SortFn };
+export { PageList, byDateAndAlphabetical, byDateAndAlphabeticalFolderFirst };

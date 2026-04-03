@@ -2,9 +2,9 @@ import type {
   QuartzComponent,
   QuartzComponentConstructor,
   QuartzComponentProps,
+  SortFn,
 } from "@quartz-community/types";
 import { PageList } from "./PageList";
-import type { SortFn } from "./PageList";
 import { htmlToJsx } from "@quartz-community/utils/jsx";
 import type { ComponentChildren } from "preact";
 import type { Root } from "hast";
