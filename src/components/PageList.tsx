@@ -4,6 +4,7 @@ import type {
   QuartzPluginData,
   SortFn,
 } from "@quartz-community/types";
+import { getDate, byDateAndAlphabetical } from "@quartz-community/utils/sort";
 import { resolveRelative, isFolderPath } from "../util/path";
 import type { FullSlug } from "../util/path";
 
@@ -19,28 +20,9 @@ interface PageData extends QuartzPluginData {
 }
 
 export type { SortFn } from "@quartz-community/types";
+export { byDateAndAlphabetical };
 
-function getDate(cfg: unknown, data: PageData): Date | undefined {
-  const type = (cfg as { defaultDateType?: string } | undefined)?.defaultDateType ?? "created";
-  return data.dates?.[type as keyof typeof data.dates] as Date | undefined;
-}
-
-export function byDateAndAlphabetical(cfg: unknown): SortFn {
-  return (f1, f2) => {
-    if (f1.dates && f2.dates) {
-      return (getDate(cfg, f2)?.getTime() ?? 0) - (getDate(cfg, f1)?.getTime() ?? 0);
-    } else if (f1.dates && !f2.dates) {
-      return -1;
-    } else if (!f1.dates && f2.dates) {
-      return 1;
-    }
-    const f1Title = f1.frontmatter?.title?.toLowerCase() ?? "";
-    const f2Title = f2.frontmatter?.title?.toLowerCase() ?? "";
-    return f1Title.localeCompare(f2Title);
-  };
-}
-
-export function byDateAndAlphabeticalFolderFirst(cfg: unknown): SortFn {
+export function byDateAndAlphabeticalFolderFirst(_cfg: unknown): SortFn {
   return (f1, f2) => {
     const f1IsFolder = isFolderPath(f1.slug ?? "");
     const f2IsFolder = isFolderPath(f2.slug ?? "");
@@ -48,7 +30,7 @@ export function byDateAndAlphabeticalFolderFirst(cfg: unknown): SortFn {
     if (!f1IsFolder && f2IsFolder) return 1;
 
     if (f1.dates && f2.dates) {
-      return (getDate(cfg, f2)?.getTime() ?? 0) - (getDate(cfg, f1)?.getTime() ?? 0);
+      return (getDate(f2)?.getTime() ?? 0) - (getDate(f1)?.getTime() ?? 0);
     } else if (f1.dates && !f2.dates) {
       return -1;
     } else if (!f1.dates && f2.dates) {
@@ -109,7 +91,7 @@ export const PageList: QuartzComponent = ({
               <p class="meta">
                 {page.dates && (
                   <DateDisplay
-                    date={getDate(cfg, page)!}
+                    date={getDate(page)!}
                     locale={(cfg as { locale?: string } | undefined)?.locale ?? "en-US"}
                   />
                 )}
