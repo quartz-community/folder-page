@@ -89,7 +89,7 @@ export const PageList: QuartzComponent = ({
           <li class="section-li">
             <div class="section">
               <p class="meta">
-                {page.dates && (
+                {page.dates && getDate(page) && (
                   <DateDisplay
                     date={getDate(page)!}
                     locale={(cfg as { locale?: string } | undefined)?.locale ?? "en-US"}

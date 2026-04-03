@@ -84,7 +84,7 @@ var PageList = ({
     const title = page.frontmatter?.title;
     const tags = page.frontmatter?.tags ?? [];
     return /* @__PURE__ */ jsx("li", { class: "section-li", children: /* @__PURE__ */ jsxs("div", { class: "section", children: [
-      /* @__PURE__ */ jsx("p", { class: "meta", children: page.dates && /* @__PURE__ */ jsx(
+      /* @__PURE__ */ jsx("p", { class: "meta", children: page.dates && getDate(page) && /* @__PURE__ */ jsx(
         DateDisplay,
         {
           date: getDate(page),
