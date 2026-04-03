@@ -1,23 +1,7 @@
-import type {
-  QuartzComponent,
-  QuartzComponentProps,
-  QuartzPluginData,
-  SortFn,
-} from "@quartz-community/types";
+import type { QuartzComponent, QuartzComponentProps, SortFn } from "@quartz-community/types";
 import { getDate, byDateAndAlphabetical } from "@quartz-community/utils/sort";
 import { resolveRelative, isFolderPath } from "../util/path";
 import type { FullSlug } from "../util/path";
-
-interface PageData extends QuartzPluginData {
-  slug?: string;
-  frontmatter?: { title?: string; tags?: string[] };
-  dates?: {
-    created: Date;
-    modified: Date;
-    published: Date;
-  };
-  [key: string]: unknown;
-}
 
 export type { SortFn } from "@quartz-community/types";
 export { byDateAndAlphabetical };
@@ -72,7 +56,7 @@ export const PageList: QuartzComponent = ({
   sort,
 }: PageListProps) => {
   const sorter = sort ?? byDateAndAlphabeticalFolderFirst(cfg);
-  let list = [...(allFiles as PageData[])].sort(sorter);
+  let list = [...allFiles].sort(sorter);
   if (limit) {
     list = list.slice(0, limit);
   }
@@ -83,7 +67,7 @@ export const PageList: QuartzComponent = ({
     <ul class="section-ul">
       {list.map((page) => {
         const title = page.frontmatter?.title;
-        const tags = page.frontmatter?.tags ?? [];
+        const tags = (page.frontmatter?.tags ?? []) as string[];
 
         return (
           <li class="section-li">
