@@ -2667,7 +2667,10 @@ function concatenateResources(...resources) {
 function pagesFromTrie(folder, showSubfolders) {
   return folder.children.map((node) => {
     const nodeData = node.data;
-    if (nodeData) return nodeData;
+    if (nodeData) {
+      if (nodeData.unlisted === true) return void 0;
+      return nodeData;
+    }
     if (node.isFolder && showSubfolders) {
       return {
         slug: node.slug,
@@ -2683,6 +2686,7 @@ function pagesFromAllFiles(allFiles, folderSlug, showSubfolders) {
   const directChildren = [];
   const subfolderFiles = /* @__PURE__ */ new Map();
   for (const file of allFiles) {
+    if (file.unlisted === true) continue;
     const fileSlug = file.slug;
     if (!fileSlug || !fileSlug.startsWith(folderPrefix)) continue;
     const relativePath = fileSlug.slice(folderPrefix.length);

@@ -9,4 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Respect the `file.data.unlisted` convention in both folder discovery (virtual page generation) and folder listings (the page-list inside a folder index). Unlisted pages are never shown in folder listings and never contribute folder/subfolder entries.
+- Exported `pagesFromAllFiles` helper for reuse and testing.
+- Unit tests for `pagesFromAllFiles` covering the unlisted-filter behavior.
+
 - Initial Quartz community plugin template.

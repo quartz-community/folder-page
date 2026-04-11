@@ -2652,7 +2652,10 @@ function concatenateResources(...resources) {
 function pagesFromTrie(folder, showSubfolders) {
   return folder.children.map((node) => {
     const nodeData = node.data;
-    if (nodeData) return nodeData;
+    if (nodeData) {
+      if (nodeData.unlisted === true) return void 0;
+      return nodeData;
+    }
     if (node.isFolder && showSubfolders) {
       return {
         slug: node.slug,
@@ -2668,6 +2671,7 @@ function pagesFromAllFiles(allFiles, folderSlug, showSubfolders) {
   const directChildren = [];
   const subfolderFiles = /* @__PURE__ */ new Map();
   for (const file of allFiles) {
+    if (file.unlisted === true) continue;
     const fileSlug = file.slug;
     if (!fileSlug || !fileSlug.startsWith(folderPrefix)) continue;
     const relativePath = fileSlug.slice(folderPrefix.length);
@@ -2787,7 +2791,7 @@ var FolderPage = (opts) => {
     priority: 10,
     match: folderMatcher,
     generate({ content, cfg }) {
-      const allFiles = content.map((c) => c[1].data);
+      const allFiles = content.map((c) => c[1].data).filter((d) => d?.unlisted !== true);
       const locale = cfg?.locale ?? "en-US";
       const folders = /* @__PURE__ */ new Set();
       const folderDisplayNames = /* @__PURE__ */ new Map();
@@ -2813,7 +2817,9 @@ var FolderPage = (opts) => {
       }
       const foldersWithIndex = /* @__PURE__ */ new Set();
       for (const [, file] of content) {
-        const slug2 = file.data?.slug;
+        const data = file.data;
+        if (data?.unlisted === true) continue;
+        const slug2 = data?.slug;
         if (slug2 && slug2.endsWith("/index")) {
           const folder = slug2.slice(0, -"/index".length);
           foldersWithIndex.add(folder);

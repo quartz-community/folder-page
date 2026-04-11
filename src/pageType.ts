@@ -41,7 +41,9 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
     priority: 10,
     match: folderMatcher,
     generate({ content, cfg }) {
-      const allFiles = content.map((c) => c[1].data);
+      const allFiles = content
+        .map((c) => c[1].data)
+        .filter((d) => (d as { unlisted?: unknown } | undefined)?.unlisted !== true);
       const locale = (cfg as { locale?: string } | undefined)?.locale ?? "en-US";
 
       const folders = new Set<string>();
@@ -76,7 +78,9 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
 
       const foldersWithIndex = new Set<string>();
       for (const [, file] of content) {
-        const slug = (file.data as { slug?: string } | undefined)?.slug;
+        const data = file.data as { slug?: string; unlisted?: unknown } | undefined;
+        if (data?.unlisted === true) continue;
+        const slug = data?.slug;
         if (slug && slug.endsWith("/index")) {
           const folder = slug.slice(0, -"/index".length);
           foldersWithIndex.add(folder);

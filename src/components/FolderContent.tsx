@@ -33,6 +33,7 @@ interface TrieNode {
 
 type PageEntry = {
   slug?: string;
+  unlisted?: boolean;
   dates?: { created: Date; modified: Date; published: Date };
   frontmatter?: { title?: string; tags?: string[] };
 };
@@ -48,7 +49,10 @@ function pagesFromTrie(folder: TrieNode, showSubfolders: boolean): PageEntry[] {
   return folder.children
     .map((node) => {
       const nodeData = node.data as PageEntry | null;
-      if (nodeData) return nodeData;
+      if (nodeData) {
+        if (nodeData.unlisted === true) return undefined;
+        return nodeData;
+      }
 
       if (node.isFolder && showSubfolders) {
         return {
@@ -62,7 +66,7 @@ function pagesFromTrie(folder: TrieNode, showSubfolders: boolean): PageEntry[] {
     .filter((page): page is PageEntry => page !== undefined);
 }
 
-function pagesFromAllFiles(
+export function pagesFromAllFiles(
   allFiles: unknown[],
   folderSlug: string,
   showSubfolders: boolean,
@@ -77,6 +81,7 @@ function pagesFromAllFiles(
   const subfolderFiles = new Map<string, PageEntry[]>();
 
   for (const file of allFiles as PageEntry[]) {
+    if (file.unlisted === true) continue;
     const fileSlug = file.slug;
     if (!fileSlug || !fileSlug.startsWith(folderPrefix)) continue;
 
