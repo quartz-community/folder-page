@@ -178,7 +178,7 @@ export default ((opts?: Partial<FolderContentOptions>) => {
     const listProps = {
       ...props,
       sort: options.sort,
-      allFiles: allPagesInFolder,
+      allFiles: allPagesInFolder as unknown as QuartzComponentProps["allFiles"],
     };
 
     const hastRoot = tree as Root;
