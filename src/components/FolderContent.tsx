@@ -1,7 +1,9 @@
 import type {
+  FullSlug,
   QuartzComponent,
   QuartzComponentConstructor,
   QuartzComponentProps,
+  QuartzPluginData,
   SortFn,
 } from "@quartz-community/types";
 import { PageList } from "./PageList";
@@ -31,12 +33,7 @@ interface TrieNode {
   findNode(path: string[]): TrieNode | undefined;
 }
 
-type PageEntry = {
-  slug?: string;
-  unlisted?: boolean;
-  dates?: { created: Date; modified: Date; published: Date };
-  frontmatter?: { title?: string; tags?: string[] };
-};
+type PageEntry = QuartzPluginData & Record<string, unknown>;
 
 function concatenateResources(
   ...resources: (string | string[] | undefined)[]
@@ -56,7 +53,7 @@ function pagesFromTrie(folder: TrieNode, showSubfolders: boolean): PageEntry[] {
 
       if (node.isFolder && showSubfolders) {
         return {
-          slug: node.slug,
+          slug: node.slug as FullSlug,
           dates: mostRecentDatesFromChildren(node.children),
           frontmatter: { title: node.displayName, tags: [] },
         };
@@ -106,7 +103,7 @@ export function pagesFromAllFiles(
     if (indexFile) continue;
 
     directChildren.push({
-      slug: `${folderPrefix}${subfolderName}/index`,
+      slug: `${folderPrefix}${subfolderName}/index` as FullSlug,
       dates: mostRecentDatesFromEntries(files),
       frontmatter: { title: subfolderName, tags: [] },
     });
@@ -178,7 +175,7 @@ export default ((opts?: Partial<FolderContentOptions>) => {
     const listProps = {
       ...props,
       sort: options.sort,
-      allFiles: allPagesInFolder as unknown as QuartzComponentProps["allFiles"],
+      allFiles: allPagesInFolder,
     };
 
     const hastRoot = tree as Root;
