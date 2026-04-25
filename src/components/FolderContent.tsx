@@ -188,7 +188,9 @@ export default ((opts?: Partial<FolderContentOptions>) => {
 
     return (
       <div class="popover-hint">
-        <article class={classes}>{content}</article>
+        <article class={classes}>
+          <div class="markdown-preview-view markdown-rendered">{content}</div>
+        </article>
         <div class="page-listing">
           {options.showFolderCount && (
             <p>

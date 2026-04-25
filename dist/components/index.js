@@ -2773,7 +2773,7 @@ var FolderContent_default = ((opts) => {
     const content = hastRoot.children.length === 0 ? fileData?.description : htmlToJsx(hastRoot);
     const pageListContent = PageList(listProps);
     return /* @__PURE__ */ jsxs("div", { class: "popover-hint", children: [
-      /* @__PURE__ */ jsx("article", { class: classes, children: content }),
+      /* @__PURE__ */ jsx("article", { class: classes, children: /* @__PURE__ */ jsx("div", { class: "markdown-preview-view markdown-rendered", children: content }) }),
       /* @__PURE__ */ jsxs("div", { class: "page-listing", children: [
         options.showFolderCount && /* @__PURE__ */ jsx("p", { children: i18n(
           cfg?.locale ?? "en-US"
