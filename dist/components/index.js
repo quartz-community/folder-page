@@ -28,9 +28,9 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
-// node_modules/inline-style-parser/cjs/index.js
+// ../../node_modules/.pnpm/inline-style-parser@0.2.7/node_modules/inline-style-parser/cjs/index.js
 var require_cjs = __commonJS({
-  "node_modules/inline-style-parser/cjs/index.js"(exports$1, module) {
+  "../../node_modules/.pnpm/inline-style-parser@0.2.7/node_modules/inline-style-parser/cjs/index.js"(exports, module) {
     var COMMENT_REGEX = /\/\*[^*]*\*+([^/*][^*]*\*+)*\//g;
     var NEWLINE_REGEX = /\n/g;
     var WHITESPACE_REGEX = /^\s*/;
@@ -166,14 +166,14 @@ var require_cjs = __commonJS({
   }
 });
 
-// node_modules/style-to-object/cjs/index.js
+// ../../node_modules/.pnpm/style-to-object@1.0.14/node_modules/style-to-object/cjs/index.js
 var require_cjs2 = __commonJS({
-  "node_modules/style-to-object/cjs/index.js"(exports$1) {
-    var __importDefault = exports$1 && exports$1.__importDefault || function(mod) {
+  "../../node_modules/.pnpm/style-to-object@1.0.14/node_modules/style-to-object/cjs/index.js"(exports) {
+    var __importDefault = exports && exports.__importDefault || function(mod) {
       return mod && mod.__esModule ? mod : { "default": mod };
     };
-    Object.defineProperty(exports$1, "__esModule", { value: true });
-    exports$1.default = StyleToObject;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = StyleToObject;
     var inline_style_parser_1 = __importDefault(require_cjs());
     function StyleToObject(style, iterator) {
       let styleObject = null;
@@ -199,11 +199,11 @@ var require_cjs2 = __commonJS({
   }
 });
 
-// node_modules/style-to-js/cjs/utilities.js
+// ../../node_modules/.pnpm/style-to-js@1.1.21/node_modules/style-to-js/cjs/utilities.js
 var require_utilities = __commonJS({
-  "node_modules/style-to-js/cjs/utilities.js"(exports$1) {
-    Object.defineProperty(exports$1, "__esModule", { value: true });
-    exports$1.camelCase = void 0;
+  "../../node_modules/.pnpm/style-to-js@1.1.21/node_modules/style-to-js/cjs/utilities.js"(exports) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.camelCase = void 0;
     var CUSTOM_PROPERTY_REGEX = /^--[a-zA-Z0-9_-]+$/;
     var HYPHEN_REGEX = /-([a-z])/g;
     var NO_HYPHEN_REGEX = /^[^-]+$/;
@@ -233,14 +233,14 @@ var require_utilities = __commonJS({
       }
       return property.replace(HYPHEN_REGEX, capitalize);
     };
-    exports$1.camelCase = camelCase;
+    exports.camelCase = camelCase;
   }
 });
 
-// node_modules/style-to-js/cjs/index.js
+// ../../node_modules/.pnpm/style-to-js@1.1.21/node_modules/style-to-js/cjs/index.js
 var require_cjs3 = __commonJS({
-  "node_modules/style-to-js/cjs/index.js"(exports$1, module) {
-    var __importDefault = exports$1 && exports$1.__importDefault || function(mod) {
+  "../../node_modules/.pnpm/style-to-js@1.1.21/node_modules/style-to-js/cjs/index.js"(exports, module) {
+    var __importDefault = exports && exports.__importDefault || function(mod) {
       return mod && mod.__esModule ? mod : { "default": mod };
     };
     var style_to_object_1 = __importDefault(require_cjs2());
@@ -262,7 +262,7 @@ var require_cjs3 = __commonJS({
   }
 });
 
-// node_modules/@quartz-community/utils/dist/sort.js
+// ../utils/dist/sort.js
 function getDate(data) {
   const defaultDateType = data.defaultDateType;
   if (!defaultDateType) {
@@ -288,7 +288,7 @@ function byDateAndAlphabetical() {
   };
 }
 
-// node_modules/@quartz-community/utils/dist/path.js
+// ../utils/dist/path.js
 function simplifySlug(fp) {
   const res = stripSlashes(trimSuffix(fp, "index"), true);
   return res.length === 0 ? "/" : res;
@@ -341,7 +341,7 @@ function resolveRelative(current, target) {
   return res;
 }
 
-// node_modules/preact/dist/preact.mjs
+// ../../node_modules/.pnpm/preact@10.29.7_preact-render-to-string@6.7.0/node_modules/preact/dist/preact.mjs
 var n;
 var l;
 var u;
@@ -368,7 +368,7 @@ n = w.slice, l = { __e: function(n2, l2, u3, t2) {
   throw n2;
 } }, u = 0, "function" == typeof Promise ? Promise.prototype.then.bind(Promise.resolve()) : setTimeout, Math.random().toString(8);
 
-// node_modules/preact/jsx-runtime/dist/jsxRuntime.mjs
+// ../../node_modules/.pnpm/preact@10.29.7_preact-render-to-string@6.7.0/node_modules/preact/jsx-runtime/dist/jsxRuntime.mjs
 var f2 = 0;
 function u2(e2, t2, n2, o2, i2, u3) {
   t2 || (t2 = {});
@@ -461,7 +461,7 @@ PageList.css = `
 }
 `;
 
-// node_modules/comma-separated-tokens/index.js
+// ../../node_modules/.pnpm/comma-separated-tokens@2.0.3/node_modules/comma-separated-tokens/index.js
 function stringify(values, options) {
   const settings = {};
   const input = values[values.length - 1] === "" ? [...values, ""] : values;
@@ -470,11 +470,11 @@ function stringify(values, options) {
   ).trim();
 }
 
-// node_modules/devlop/lib/default.js
+// ../../node_modules/.pnpm/devlop@1.1.0/node_modules/devlop/lib/default.js
 function ok() {
 }
 
-// node_modules/estree-util-is-identifier-name/lib/index.js
+// ../../node_modules/.pnpm/estree-util-is-identifier-name@3.0.0/node_modules/estree-util-is-identifier-name/lib/index.js
 var nameRe = /^[$_\p{ID_Start}][$_\u{200C}\u{200D}\p{ID_Continue}]*$/u;
 var nameReJsx = /^[$_\p{ID_Start}][-$_\u{200C}\u{200D}\p{ID_Continue}]*$/u;
 var emptyOptions = {};
@@ -484,7 +484,7 @@ function name(name2, options) {
   return re2.test(name2);
 }
 
-// node_modules/hast-util-whitespace/lib/index.js
+// ../../node_modules/.pnpm/hast-util-whitespace@3.0.0/node_modules/hast-util-whitespace/lib/index.js
 var re = /[ \t\n\f\r]/g;
 function whitespace(thing) {
   return typeof thing === "object" ? thing.type === "text" ? empty(thing.value) : false : empty(thing);
@@ -493,7 +493,7 @@ function empty(value) {
   return value.replace(re, "") === "";
 }
 
-// node_modules/property-information/lib/util/schema.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/util/schema.js
 var Schema = class {
   /**
    * @param {SchemaType['property']} property
@@ -517,7 +517,7 @@ Schema.prototype.normal = {};
 Schema.prototype.property = {};
 Schema.prototype.space = void 0;
 
-// node_modules/property-information/lib/util/merge.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/util/merge.js
 function merge(definitions, space) {
   const property = {};
   const normal = {};
@@ -528,12 +528,12 @@ function merge(definitions, space) {
   return new Schema(property, normal, space);
 }
 
-// node_modules/property-information/lib/normalize.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/normalize.js
 function normalize(value) {
   return value.toLowerCase();
 }
 
-// node_modules/property-information/lib/util/info.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/util/info.js
 var Info = class {
   /**
    * @param {string} property
@@ -561,7 +561,7 @@ Info.prototype.property = "";
 Info.prototype.spaceSeparated = false;
 Info.prototype.space = void 0;
 
-// node_modules/property-information/lib/util/types.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/util/types.js
 var types_exports = {};
 __export(types_exports, {
   boolean: () => boolean,
@@ -584,7 +584,7 @@ function increment() {
   return 2 ** ++powers;
 }
 
-// node_modules/property-information/lib/util/defined-info.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/util/defined-info.js
 var checks = (
   /** @type {ReadonlyArray<keyof typeof types>} */
   Object.keys(types_exports)
@@ -622,7 +622,7 @@ function mark(values, key, value) {
   }
 }
 
-// node_modules/property-information/lib/util/create.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/util/create.js
 function create(definition) {
   const properties = {};
   const normals = {};
@@ -643,7 +643,7 @@ function create(definition) {
   return new Schema(properties, normals, definition.space);
 }
 
-// node_modules/property-information/lib/aria.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/aria.js
 var aria = create({
   properties: {
     ariaActiveDescendant: null,
@@ -701,17 +701,17 @@ var aria = create({
   }
 });
 
-// node_modules/property-information/lib/util/case-sensitive-transform.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/util/case-sensitive-transform.js
 function caseSensitiveTransform(attributes, attribute) {
   return attribute in attributes ? attributes[attribute] : attribute;
 }
 
-// node_modules/property-information/lib/util/case-insensitive-transform.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/util/case-insensitive-transform.js
 function caseInsensitiveTransform(attributes, property) {
   return caseSensitiveTransform(attributes, property.toLowerCase());
 }
 
-// node_modules/property-information/lib/html.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/html.js
 var html = create({
   attributes: {
     acceptcharset: "accept-charset",
@@ -731,6 +731,7 @@ var html = create({
     allowFullScreen: boolean,
     allowPaymentRequest: boolean,
     allowUserMedia: boolean,
+    alpha: boolean,
     alt: null,
     as: null,
     async: boolean,
@@ -744,8 +745,12 @@ var html = create({
     checked: boolean,
     cite: null,
     className: spaceSeparated,
+    closedBy: null,
+    colorSpace: null,
     cols: number,
-    colSpan: null,
+    colSpan: number,
+    command: null,
+    commandFor: null,
     content: null,
     contentEditable: booleanish,
     controls: boolean,
@@ -925,8 +930,10 @@ var html = create({
     seamless: boolean,
     selected: boolean,
     shadowRootClonable: boolean,
+    shadowRootCustomElementRegistry: boolean,
     shadowRootDelegatesFocus: boolean,
     shadowRootMode: null,
+    shadowRootSerializable: boolean,
     shape: null,
     size: number,
     sizes: null,
@@ -1063,8 +1070,11 @@ var html = create({
     allowTransparency: null,
     autoCorrect: null,
     autoSave: null,
+    credentialless: boolean,
     disablePictureInPicture: boolean,
     disableRemotePlayback: boolean,
+    exportParts: commaSeparated,
+    part: spaceSeparated,
     prefix: null,
     property: null,
     results: number,
@@ -1075,7 +1085,7 @@ var html = create({
   transform: caseInsensitiveTransform
 });
 
-// node_modules/property-information/lib/svg.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/svg.js
 var svg = create({
   attributes: {
     accentHeight: "accent-height",
@@ -1118,6 +1128,7 @@ var svg = create({
     markerEnd: "marker-end",
     markerMid: "marker-mid",
     markerStart: "marker-start",
+    maskType: "mask-type",
     navDown: "nav-down",
     navDownLeft: "nav-down-left",
     navDownRight: "nav-down-right",
@@ -1388,6 +1399,7 @@ var svg = create({
     markerWidth: null,
     mask: null,
     maskContentUnits: null,
+    maskType: null,
     maskUnits: null,
     mathematical: null,
     max: null,
@@ -1637,7 +1649,7 @@ var svg = create({
   transform: caseSensitiveTransform
 });
 
-// node_modules/property-information/lib/xlink.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/xlink.js
 var xlink = create({
   properties: {
     xLinkActuate: null,
@@ -1654,7 +1666,7 @@ var xlink = create({
   }
 });
 
-// node_modules/property-information/lib/xmlns.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/xmlns.js
 var xmlns = create({
   attributes: { xmlnsxlink: "xmlns:xlink" },
   properties: { xmlnsXLink: null, xmlns: null },
@@ -1662,7 +1674,7 @@ var xmlns = create({
   transform: caseInsensitiveTransform
 });
 
-// node_modules/property-information/lib/xml.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/xml.js
 var xml = create({
   properties: { xmlBase: null, xmlLang: null, xmlSpace: null },
   space: "xml",
@@ -1671,7 +1683,7 @@ var xml = create({
   }
 });
 
-// node_modules/property-information/lib/hast-to-react.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/hast-to-react.js
 var hastToReact = {
   classId: "classID",
   dataType: "datatype",
@@ -1692,7 +1704,7 @@ var hastToReact = {
   xmlnsXLink: "xmlnsXlink"
 };
 
-// node_modules/property-information/lib/find.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/lib/find.js
 var cap = /[A-Z]/g;
 var dash = /-[a-z]/g;
 var valid = /^data[-\w.:]+$/i;
@@ -1728,16 +1740,16 @@ function camelcase($0) {
   return $0.charAt(1).toUpperCase();
 }
 
-// node_modules/property-information/index.js
+// ../../node_modules/.pnpm/property-information@7.2.0/node_modules/property-information/index.js
 var html2 = merge([aria, html, xlink, xmlns, xml], "html");
 var svg2 = merge([aria, svg, xlink, xmlns, xml], "svg");
 
-// node_modules/space-separated-tokens/index.js
+// ../../node_modules/.pnpm/space-separated-tokens@2.0.2/node_modules/space-separated-tokens/index.js
 function stringify2(values) {
   return values.join(" ").trim();
 }
 
-// node_modules/hast-util-to-jsx-runtime/lib/index.js
+// ../../node_modules/.pnpm/hast-util-to-jsx-runtime@2.3.6/node_modules/hast-util-to-jsx-runtime/lib/index.js
 var import_style_to_js = __toESM(require_cjs3());
 var pointStart = point("start");
 function point(type) {
@@ -1754,7 +1766,7 @@ function point(type) {
   }
 }
 
-// node_modules/unist-util-stringify-position/lib/index.js
+// ../../node_modules/.pnpm/unist-util-stringify-position@4.0.0/node_modules/unist-util-stringify-position/lib/index.js
 function stringifyPosition(value) {
   if (!value || typeof value !== "object") {
     return "";
@@ -1780,7 +1792,7 @@ function index(value) {
   return value && typeof value === "number" ? value : 1;
 }
 
-// node_modules/vfile-message/lib/index.js
+// ../../node_modules/.pnpm/vfile-message@4.0.3/node_modules/vfile-message/lib/index.js
 var VFileMessage = class extends Error {
   /**
    * Create a message for `reason`.
@@ -1916,7 +1928,7 @@ VFileMessage.prototype.place = void 0;
 VFileMessage.prototype.ruleId = void 0;
 VFileMessage.prototype.source = void 0;
 
-// node_modules/hast-util-to-jsx-runtime/lib/index.js
+// ../../node_modules/.pnpm/hast-util-to-jsx-runtime@2.3.6/node_modules/hast-util-to-jsx-runtime/lib/index.js
 var own2 = {}.hasOwnProperty;
 var emptyMap = /* @__PURE__ */ new Map();
 var cap2 = /[A-Z]/g;
@@ -2294,17 +2306,14 @@ function toDash($0) {
   return "-" + $0.toLowerCase();
 }
 
-// node_modules/@quartz-community/utils/dist/jsx.js
+// ../utils/dist/jsx.js
 function childrenToString(children) {
   if (typeof children === "string") return children;
   if (Array.isArray(children)) return children.map(childrenToString).join("");
   return String(children ?? "");
 }
 var builtinComponents = {
-  table: (props) => /* @__PURE__ */ u2("div", {
-    class: "table-container",
-    children: /* @__PURE__ */ u2("table", { ...props })
-  }),
+  table: (props) => /* @__PURE__ */ u2("div", { class: "table-container", children: /* @__PURE__ */ u2("table", { ...props }) }),
   style: ({ children, ...rest }) => k("style", { ...rest, dangerouslySetInnerHTML: { __html: childrenToString(children) } }),
   script: ({ children, ...rest }) => k("script", { ...rest, dangerouslySetInnerHTML: { __html: childrenToString(children) } })
 };
