@@ -16,12 +16,14 @@ import style from "./styles/listPage.scss";
 interface FolderContentOptions {
   showFolderCount: boolean;
   showSubfolders: boolean;
+  showPageList: boolean;
   sort?: SortFn;
 }
 
 const defaultOptions: FolderContentOptions = {
   showFolderCount: true,
   showSubfolders: true,
+  showPageList: true,
 };
 
 interface TrieNode {
@@ -191,18 +193,20 @@ export default ((opts?: Partial<FolderContentOptions>) => {
         <article class={classes}>
           <div class="markdown-preview-view markdown-rendered">{content}</div>
         </article>
-        <div class="page-listing">
-          {options.showFolderCount && (
-            <p>
-              {i18n(
-                (cfg as { locale?: string } | undefined)?.locale ?? "en-US",
-              ).pages.folderContent.itemsUnderFolder({
-                count: allPagesInFolder.length,
-              })}
-            </p>
-          )}
-          <div>{pageListContent}</div>
-        </div>
+        {options.showPageList && (
+          <div class="page-listing">
+            {options.showFolderCount && (
+              <p>
+                {i18n(
+                  (cfg as { locale?: string } | undefined)?.locale ?? "en-US",
+                ).pages.folderContent.itemsUnderFolder({
+                  count: allPagesInFolder.length,
+                })}
+              </p>
+            )}
+            <div>{pageListContent}</div>
+          </div>
+        )}
       </div>
     );
   };
