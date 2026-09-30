@@ -51,7 +51,9 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
       for (const file of allFiles) {
         const slug = (file as { slug?: string } | undefined)?.slug;
         if (!slug) continue;
-        const fileFolders = getFolders(slug).filter((f) => f !== "." && f !== "tags");
+        const fileFolders = getFolders(slug).filter(
+          (f) => f !== "." && f !== "tags" && !f.startsWith("tags/"),
+        );
         for (const f of fileFolders) {
           folders.add(f);
         }
