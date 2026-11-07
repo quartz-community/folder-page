@@ -8,6 +8,7 @@ import type {
 import FolderContentComponent from "./components/FolderContent";
 import { i18n } from "./i18n";
 import { joinSegments } from "./util/path";
+import { slugifyFilePath } from "@quartz-community/utils/path";
 import type { SortFn } from "./components/PageList";
 import path from "path";
 
@@ -51,7 +52,10 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
       for (const file of allFiles) {
         const slug = (file as { slug?: string } | undefined)?.slug;
         if (!slug) continue;
-        const fileFolders = getFolders(slug).filter((f) => f !== "." && f !== "tags");
+        // folders come from file paths: a note with a permalink still belongs to its folder
+        const rel = (file as { relativePath?: string } | undefined)?.relativePath;
+        const position = rel ? slugifyFilePath(rel as never) : slug;
+        const fileFolders = getFolders(position).filter((f) => f !== "." && f !== "tags");
         for (const f of fileFolders) {
           folders.add(f);
         }
