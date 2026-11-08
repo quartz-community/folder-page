@@ -8,6 +8,7 @@ import type {
 } from "@quartz-community/types";
 import { PageList } from "./PageList";
 import { htmlToJsx } from "@quartz-community/utils/jsx";
+import { slugifyFilePath } from "@quartz-community/utils/path";
 import type { ComponentChildren } from "preact";
 import type { Root } from "hast";
 import { i18n } from "../i18n";
@@ -79,7 +80,9 @@ export function pagesFromAllFiles(
 
   for (const file of allFiles as PageEntry[]) {
     if (file.unlisted === true) continue;
-    const fileSlug = file.slug;
+    // placed by file path (a note with a permalink stays in its folder), linked by slug
+    const rel = (file as { relativePath?: string }).relativePath;
+    const fileSlug = rel ? slugifyFilePath(rel as never) : file.slug;
     if (!fileSlug || !fileSlug.startsWith(folderPrefix)) continue;
 
     const relativePath = fileSlug.slice(folderPrefix.length);
