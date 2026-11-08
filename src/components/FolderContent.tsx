@@ -103,7 +103,11 @@ export function pagesFromAllFiles(
 
   for (const [subfolderName, files] of subfolderFiles) {
     const indexFile = files.find((f) => f.slug === `${folderPrefix}${subfolderName}/index`);
-    if (indexFile) continue;
+    if (indexFile) {
+      // the subfolder has a page of its own (an index note or a generated folder page)
+      if (indexFile.unlisted !== true) directChildren.push(indexFile);
+      continue;
+    }
 
     directChildren.push({
       slug: `${folderPrefix}${subfolderName}/index` as FullSlug,
@@ -163,9 +167,11 @@ export default ((opts?: Partial<FolderContentOptions>) => {
     const trie = ctx?.trie;
     let allPagesInFolder: PageEntry[];
 
-    if (trie) {
-      const folder = trie.findNode(slug.split("/"));
-      if (!folder) return null;
+    // The trie holds the source files (and, from Quartz 5.1, file-backed virtual pages such as
+    // `.base` / `.canvas` pages). A folder holding only virtual pages may be missing from it
+    // (jackyzha0/quartz#2576); allFiles has every page, virtual pages included.
+    const folder = trie?.findNode(slug.split("/"));
+    if (folder) {
       allPagesInFolder = pagesFromTrie(folder, options.showSubfolders);
     } else {
       allPagesInFolder = pagesFromAllFiles(allFiles ?? [], slug, options.showSubfolders);

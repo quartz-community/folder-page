@@ -4,6 +4,8 @@ import type {
   PageMatcher,
   FullSlug,
   VirtualPage,
+  BuildCtx,
+  ProcessedContent,
 } from "@quartz-community/types";
 import FolderContentComponent from "./components/FolderContent";
 import { i18n } from "./i18n";
@@ -34,6 +36,12 @@ function getFolders(slug: string): string[] {
   return parentFolderNames;
 }
 
+/** `ctx.virtualPages` (Quartz core fills it while page types generate, in priority order). */
+function virtualPagesOf(ctx: BuildCtx | undefined): ProcessedContent[] {
+  const pages = (ctx as { virtualPages?: unknown } | undefined)?.virtualPages;
+  return Array.isArray(pages) ? (pages as ProcessedContent[]) : [];
+}
+
 export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
   const body: QuartzComponentConstructor = () => FolderContentComponent(opts);
 
@@ -41,8 +49,17 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
     name: "FolderPage",
     priority: 10,
     match: folderMatcher,
-    generate({ content, cfg }) {
-      const allFiles = content
+    generate({ content, cfg, ctx }) {
+      // Virtual pages of the page types that ran before this one (higher priority, e.g. a
+      // `.base` or `.canvas` file rendered by bases-page / canvas-page). A folder holding only
+      // such pages still needs a folder page (jackyzha0/quartz#2576). Tag pages live under
+      // `tags/`, which never gets folder pages.
+      const virtual = virtualPagesOf(ctx).filter((c) => {
+        const slug = (c[1].data as { slug?: string } | undefined)?.slug;
+        return !!slug && slug !== "tags" && !slug.startsWith("tags/");
+      });
+      const files = [...content, ...virtual];
+      const allFiles = files
         .map((c) => c[1].data)
         .filter((d) => (d as { unlisted?: unknown } | undefined)?.unlisted !== true);
       const locale = (cfg as { locale?: string } | undefined)?.locale ?? "en-US";
@@ -81,7 +98,7 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
       }
 
       const foldersWithIndex = new Set<string>();
-      for (const [, file] of content) {
+      for (const [, file] of files) {
         const data = file.data as { slug?: string; unlisted?: unknown } | undefined;
         if (data?.unlisted === true) continue;
         const slug = data?.slug;
