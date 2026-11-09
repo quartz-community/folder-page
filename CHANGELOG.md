@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.4
+
+### Patch Changes
+
+- cda79ad: The manifest declares the `prefixFolders` option (default `false`), so option checks and Quartz Syncer know it.
+
 ## 1.0.3
 
 ### Patch Changes
