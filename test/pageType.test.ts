@@ -42,6 +42,14 @@ describe("FolderPage.generate", () => {
     expect(await generatedSlugs([], virtual)).toEqual([]);
   });
 
+  it("makes no folder pages under tags/ for notes stored there", async () => {
+    const content = [
+      page("notes/sub/a", "notes/sub/a.md"),
+      page("tags/plugin/b", "tags/plugin/b.md"),
+    ];
+    expect(await generatedSlugs(content)).toEqual(["notes/index", "notes/sub/index"]);
+  });
+
   it("works without ctx.virtualPages", async () => {
     expect(await generatedSlugs([page("a/b", "a/b.md")], undefined)).toEqual(["a/index"]);
   });

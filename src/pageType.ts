@@ -72,7 +72,9 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
         // folders come from file paths: a note with a permalink still belongs to its folder
         const rel = (file as { relativePath?: string } | undefined)?.relativePath;
         const position = rel ? slugifyFilePath(rel as never) : slug;
-        const fileFolders = getFolders(position).filter((f) => f !== "." && f !== "tags");
+        const fileFolders = getFolders(position).filter(
+          (f) => f !== "." && f !== "tags" && !f.startsWith("tags/"),
+        );
         for (const f of fileFolders) {
           folders.add(f);
         }
