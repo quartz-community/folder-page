@@ -103,13 +103,17 @@
     "defaultEnabled": true,
     "defaultOptions": {
       "showFolderCount": true,
-      "showSubfolders": true
+      "showSubfolders": true,
+      "prefixFolders": false
     },
     "optionSchema": {
       "showFolderCount": {
         "type": "boolean"
       },
       "showSubfolders": {
+        "type": "boolean"
+      },
+      "prefixFolders": {
         "type": "boolean"
       }
     }
