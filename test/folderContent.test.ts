@@ -50,4 +50,14 @@ describe("pagesFromAllFiles", () => {
     const result = pagesFromAllFiles(allFiles, "notes/index", true);
     expect(result.map((r) => r.slug)).toEqual(["notes/page"]);
   });
+
+  it("lists a subfolder that has an index page as that page", () => {
+    const allFiles = [
+      { slug: "notes/sub/index", frontmatter: { title: "Sub" } },
+      { slug: "notes/sub/page", frontmatter: { title: "SubPage" } },
+    ];
+    const result = pagesFromAllFiles(allFiles, "notes/index", true);
+    expect(result.map((r) => r.slug)).toEqual(["notes/sub/index"]);
+    expect(result[0]?.frontmatter?.title).toBe("Sub");
+  });
 });
