@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2
+
+### Patch Changes
+
+- bdb1aaa: Generate folder pages for folders that hold only virtual pages, such as `.base` or `.canvas` files rendered by bases-page / canvas-page, so going up a level no longer gives a 404 (jackyzha0/quartz#2576). Folder listings now also list a subfolder that has its own index page, and fall back to all pages when the folder is not in Quartz's folder hierarchy.
+- 398001e: Bundles `@quartz-community/utils` 1.1.0: a short wikilink to an Obsidian folder note (`[[Topic]]` for `Topic/Topic.md`) reaches the folder page, and anchors to headings use the same slug as heading ids. `github-slugger` is no longer a dependency of this plugin.
+
 ## 1.0.1
 
 ### Patch Changes
