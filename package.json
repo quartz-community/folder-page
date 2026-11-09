@@ -1,6 +1,6 @@
 {
   "name": "@quartz-community/folder-page",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Folder page type plugin for Quartz.",
   "type": "module",
   "license": "MIT",
