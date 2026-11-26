@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.2
+
+### Patch Changes
+
+- 67850da: Bundles `@quartz-community/utils` 1.3, so `configuration.slugs.stripDiacritics` (Quartz 5.3) also applies to the pages listed on folder pages. Before, the plugin bundled an older utils that ignored the option, and its slugs kept their diacritics.
+
 ## 1.1.1
 
 ### Patch Changes
