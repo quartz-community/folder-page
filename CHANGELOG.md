@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.5
+
+### Patch Changes
+
+- 2ba46de: A folder whose own `index.md` is unlisted no longer gets a generated folder page, which replaced that note on the site.
+
 ## 1.1.4
 
 ### Patch Changes
