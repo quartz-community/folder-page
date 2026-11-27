@@ -77,21 +77,22 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
           folders.add(f);
         }
 
-        const relativePath = (file as { relativePath?: string } | undefined)?.relativePath;
-        if (relativePath) {
+        // a folder's name as in the vault, by the folder's slug: from the file's path, not its
+        // slug, which a permalink can make another folder's
+        if (rel) {
           const slugParts = path
-            .dirname(slug)
+            .dirname(position)
             .split("/")
             .filter((s) => s !== ".");
           const pathParts = path
-            .dirname(relativePath)
+            .dirname(rel)
             .split("/")
             .filter((s) => s !== ".");
           for (let i = 0; i < slugParts.length && i < pathParts.length; i++) {
-            const slugPart = slugParts[i];
+            const folder = slugParts.slice(0, i + 1).join("/");
             const pathPart = pathParts[i];
-            if (slugPart && pathPart && !folderDisplayNames.has(slugPart)) {
-              folderDisplayNames.set(slugPart, pathPart);
+            if (pathPart && !folderDisplayNames.has(folder)) {
+              folderDisplayNames.set(folder, pathPart);
             }
           }
         }
@@ -118,7 +119,7 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
 
         const folder = slug.slice(0, -"/index".length);
         const slugSegment = folder.split("/").pop() ?? folder;
-        const folderName = folderDisplayNames.get(slugSegment) ?? slugSegment;
+        const folderName = folderDisplayNames.get(folder) ?? slugSegment;
         frontmatter.title = opts?.prefixFolders
           ? `${i18n(locale).pages.folderContent.folder}: ${folderName}`
           : folderName;
@@ -130,7 +131,7 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
 
         const slug = joinSegments(folder, "index") as unknown as FullSlug;
         const slugSegment = folder.split("/").pop() ?? folder;
-        const folderName = folderDisplayNames.get(slugSegment) ?? slugSegment;
+        const folderName = folderDisplayNames.get(folder) ?? slugSegment;
         const title = opts?.prefixFolders
           ? `${i18n(locale).pages.folderContent.folder}: ${folderName}`
           : folderName;

@@ -59,16 +59,36 @@ describe("pagesFromAllFiles", () => {
     ]);
   });
 
-  // bug: pagesFromAllFiles means to leave out a subfolder whose index note is unlisted (it
-  // checks `indexFile.unlisted`), but unlisted files were skipped before, so the index is never
-  // found and the subfolder is listed anyway, as a generated entry titled by its slug.
-  it.fails("leaves out a subfolder whose index note is unlisted", () => {
+  it("leaves out a subfolder whose index note is unlisted", () => {
     const files = [
       { slug: "notes/a", frontmatter: { title: "A" } },
       { slug: "notes/hidden/index", frontmatter: { title: "H" }, unlisted: true },
       { slug: "notes/hidden/c", frontmatter: { title: "C" } },
     ];
     expect(pagesFromAllFiles(files, "notes/index", true).map((p) => p.slug)).toEqual(["notes/a"]);
+  });
+
+  it("leaves out a subfolder holding only unlisted pages", () => {
+    const files = [
+      { slug: "notes/a", frontmatter: { title: "A" } },
+      { slug: "notes/hidden/c", frontmatter: { title: "C" }, unlisted: true },
+    ];
+    expect(pagesFromAllFiles(files, "notes/index", true).map((p) => p.slug)).toEqual(["notes/a"]);
+  });
+
+  it("dates a subfolder without an index note by its newest listed page", () => {
+    const files = [
+      { slug: "notes/sub/a", dates: dates("2025-01-01"), defaultDateType: "modified" },
+      {
+        slug: "notes/sub/b",
+        dates: dates("2026-01-01"),
+        defaultDateType: "modified",
+        unlisted: true,
+      },
+    ];
+    const [sub] = pagesFromAllFiles(files, "notes/index", true);
+    expect(sub).toMatchObject({ slug: "notes/sub/index", defaultDateType: "modified" });
+    expect(sub!.dates!.modified).toEqual(day("2025-01-01"));
   });
 
   it("reads the folder from a slug with or without /index or a trailing slash", () => {
@@ -135,10 +155,7 @@ describe("FolderContent", () => {
     );
   });
 
-  // bug: a subfolder without an index note is listed with its newest page's dates (computed for
-  // it), but without `defaultDateType`, so PageList's getDate finds no date: the subfolder shows
-  // no date (Quartz 4 showed it) and subfolders aren't ordered by it.
-  it.fails("shows a subfolder's newest date", () => {
+  it("shows a subfolder's newest date", () => {
     const sub = trieNode("notes/sub/index", null, [
       trieNode("notes/sub/y", {
         slug: "notes/sub/y",
@@ -149,6 +166,36 @@ describe("FolderContent", () => {
     const folder = trieNode("notes/index", null, [sub]);
     const trie = { findNode: () => folder };
     expect(textOf(render({ ctx: { trie } }))).toContain("Jan 01, 2026");
+  });
+
+  it("shows no date for a subfolder whose pages have none", () => {
+    const sub = trieNode("notes/sub/index", null, [
+      trieNode("notes/sub/y", { slug: "notes/sub/y", frontmatter: { title: "Y" } }),
+    ]);
+    const folder = trieNode("notes/index", null, [sub]);
+    expect(textOf(render({ ctx: { trie: { findNode: () => folder } } }))).not.toMatch(/\d{4}/);
+  });
+
+  it("orders subfolders by their newest date", () => {
+    const sub = (name: string, d: string) =>
+      trieNode(
+        `notes/${name}/index`,
+        null,
+        [
+          trieNode(`notes/${name}/y`, {
+            slug: `notes/${name}/y`,
+            dates: dates(d),
+            defaultDateType: "modified",
+          }),
+        ],
+        name,
+      );
+    const folder = trieNode("notes/index", null, [
+      sub("Earlier", "2024-01-01"),
+      sub("Later", "2026-01-01"),
+    ]);
+    const text = textOf(render({ ctx: { trie: { findNode: () => folder } } }));
+    expect(text.indexOf("Later")).toBeLessThan(text.indexOf("Earlier"));
   });
 
   it("falls back to all files for a folder the trie doesn't have", () => {
@@ -240,10 +287,7 @@ describe("generated folder pages", () => {
     );
   });
 
-  // bug: folder names are matched to slug segments position by position from each page's slug,
-  // so a page with a permalink names the folders of its permalink after its own folders: here the
-  // folder `ideas` is titled "Drafts" (and `drafts` loses its capital).
-  it.fails("are named after their own folder, also with pages that have a permalink", async () => {
+  it("are named after their own folder, also with pages that have a permalink", async () => {
     const pages = await generate([
       page("ideas/idea", "Drafts/Idea.md"),
       page("ideas/x", "Ideas/x.md"),
@@ -251,6 +295,19 @@ describe("generated folder pages", () => {
     expect(pages.map((p) => [p.slug, p.title]).sort()).toEqual([
       ["drafts/index", "Drafts"],
       ["ideas/index", "Ideas"],
+    ]);
+  });
+
+  it("names folders of the same name in different places each after its own path", async () => {
+    const pages = await generate([
+      page("a/notes/x", "A/Notes/x.md"),
+      page("b/notes/y", "B/notes/y.md"),
+    ]);
+    expect(pages.map((p) => [p.slug, p.title]).sort()).toEqual([
+      ["a/index", "A"],
+      ["a/notes/index", "Notes"],
+      ["b/index", "B"],
+      ["b/notes/index", "notes"],
     ]);
   });
 });
