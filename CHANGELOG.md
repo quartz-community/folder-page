@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.4
+
+### Patch Changes
+
+- b03b301: Generated folder pages are titled after their own folder as written in the vault, also when the folder holds pages with a permalink.
+- b03b301: Subfolders without an index note show the date of their newest page again, and are ordered by it.
+- b03b301: A subfolder whose index note is unlisted is no longer listed on its parent folder's page.
+
 ## 1.1.3
 
 ### Patch Changes
