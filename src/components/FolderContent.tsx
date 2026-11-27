@@ -53,11 +53,11 @@ function pagesFromTrie(folder: TrieNode, showSubfolders: boolean): PageEntry[] {
       }
 
       if (node.isFolder && showSubfolders) {
-        return {
-          slug: node.slug as FullSlug,
-          dates: mostRecentDatesFromChildren(node.children),
-          frontmatter: { title: node.displayName, tags: [] },
-        };
+        return subfolderEntry(
+          node.slug,
+          node.displayName,
+          node.children.map((child) => child.data as PageEntry | null),
+        );
       }
       return undefined;
     })
@@ -79,7 +79,6 @@ export function pagesFromAllFiles(
   const subfolderFiles = new Map<string, PageEntry[]>();
 
   for (const file of allFiles as PageEntry[]) {
-    if (file.unlisted === true) continue;
     // placed by file path (a note with a permalink stays in its folder), linked by slug
     const rel = (file as { relativePath?: string }).relativePath;
     const fileSlug = rel ? slugifyFilePath(rel as never) : file.slug;
@@ -91,8 +90,9 @@ export function pagesFromAllFiles(
     const segments = relativePath.split("/");
 
     if (segments.length === 1) {
-      directChildren.push(file);
+      if (file.unlisted !== true) directChildren.push(file);
     } else if (showSubfolders) {
+      // unlisted pages too: a subfolder whose index note is unlisted is left out
       const subfolderName = segments[0]!;
       if (!subfolderFiles.has(subfolderName)) {
         subfolderFiles.set(subfolderName, []);
@@ -109,35 +109,33 @@ export function pagesFromAllFiles(
       continue;
     }
 
-    directChildren.push({
-      slug: `${folderPrefix}${subfolderName}/index` as FullSlug,
-      dates: mostRecentDatesFromEntries(files),
-      frontmatter: { title: subfolderName, tags: [] },
-    });
+    const listed = files.filter((f) => f.unlisted !== true);
+    if (listed.length === 0) continue;
+    directChildren.push(
+      subfolderEntry(`${folderPrefix}${subfolderName}/index`, subfolderName, listed),
+    );
   }
 
   return directChildren;
 }
 
-function mostRecentDatesFromChildren(children: TrieNode[]): PageEntry["dates"] {
-  let maybeDates: PageEntry["dates"] | undefined;
-  for (const child of children) {
-    const childDates = (child.data as { dates?: PageEntry["dates"] } | null)?.dates;
-    if (childDates) {
-      if (!maybeDates) {
-        maybeDates = { ...childDates };
-      } else {
-        if (childDates.created > maybeDates.created) maybeDates.created = childDates.created;
-        if (childDates.modified > maybeDates.modified) maybeDates.modified = childDates.modified;
-        if (childDates.published > maybeDates.published)
-          maybeDates.published = childDates.published;
-      }
-    }
-  }
-  return maybeDates ?? { created: new Date(), modified: new Date(), published: new Date() };
+/**
+ * A subfolder without a page of its own, listed with the newest dates of its pages and their
+ * date type (which PageList shows and sorts by).
+ */
+function subfolderEntry(slug: string, title: string, pages: (PageEntry | null)[]): PageEntry {
+  const dated = pages.filter((page): page is PageEntry => !!page?.dates && page.unlisted !== true);
+  const entry: PageEntry = {
+    slug: slug as FullSlug,
+    dates: mostRecentDates(dated),
+    frontmatter: { title, tags: [] },
+  };
+  const defaultDateType = dated.find((page) => page.defaultDateType)?.defaultDateType;
+  if (defaultDateType) entry.defaultDateType = defaultDateType;
+  return entry;
 }
 
-function mostRecentDatesFromEntries(entries: PageEntry[]): PageEntry["dates"] {
+function mostRecentDates(entries: PageEntry[]): PageEntry["dates"] {
   let maybeDates: PageEntry["dates"] | undefined;
   for (const entry of entries) {
     if (entry.dates) {
