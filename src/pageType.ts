@@ -98,10 +98,11 @@ export const FolderPage: QuartzPageTypePlugin<FolderPageOptions> = (opts) => {
         }
       }
 
+      // A folder with its own index note gets no generated page, also when that note is
+      // unlisted: the generated page would take the note's slug and replace it.
       const foldersWithIndex = new Set<string>();
       for (const [, file] of files) {
-        const data = file.data as { slug?: string; unlisted?: unknown } | undefined;
-        if (data?.unlisted === true) continue;
+        const data = file.data as { slug?: string } | undefined;
         const slug = data?.slug;
         if (slug && slug.endsWith("/index")) {
           const folder = slug.slice(0, -"/index".length);

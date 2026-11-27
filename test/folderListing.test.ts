@@ -270,6 +270,15 @@ describe("generated folder pages", () => {
     expect(pages[0]!.title).toBe("Folder: X");
   });
 
+  // The generated page would take the note's slug (notes/index) and replace the note.
+  it("are not made for a folder whose own index note is unlisted", async () => {
+    const pages = await generate([
+      page("notes/index", "notes/index.md", { unlisted: true }),
+      page("notes/a", "notes/a.md"),
+    ]);
+    expect(pages.map((p) => p.slug)).toEqual([]);
+  });
+
   it("are not made for folders holding only unlisted pages", async () => {
     expect(await generate([page("hidden/a", "hidden/a.md", { unlisted: true })])).toEqual([]);
   });
